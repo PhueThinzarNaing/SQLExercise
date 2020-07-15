@@ -1,0 +1,174 @@
+
+
+CREATE TABLE Team (Team_id varchar(20) primary key,
+                               Team_name varchar(100),
+                                foundeddate DATE
+                                );
+
+CREATE TABLE Player(Player_id varchar(20) primary key,
+                              Player_name varchar(100),
+                              JersyNo int,
+                             age int,
+                             salary decimal,
+                             height decimal,
+                             Team_id varchar(20),
+                              foreign key(Team_id) references Team(Team_id)
+                              );
+
+
+insert into Team values('T1', 'Manchester United','1699-08-18');
+select * from Team;
++---------+-------------------+-------------+
+| Team_id | Team_name         | foundeddate |
++---------+-------------------+-------------+
+| T1      | Manchester United | 1699-08-18  |
+| T2      | ManU              | 1698-08-18  |
+| T3      | Barcelona         | 1698-08-18  |
+| T4      |  Real Madrid      | 1696-08-18  |
+| T5      | Liverpool         | 1696-08-18  |
+| T6      |  Chelsea          | 1696-08-18  |
+| T7      | Juventus          | 1696-08-18  |
+| T8      | Arsenal           | 1696-08-18  |
++---------+-------------------+-------------+
+8 rows in set (0.00 sec)
+
+
+mysql> insert into Team values('T7','Juventus','1696-08-18');
+Query OK, 1 row affected (0.28 sec)
+
+mysql> insert into Team values('T8','Arsenal','1696-08-18');
+Query OK, 1 row affected (0.16 sec)
+
+mysql> select * from Team;
++---------+-------------------+-------------+
+| Team_id | Team_name         | foundeddate |
++---------+-------------------+-------------+
+| T1      | Manchester United | 1699-08-18  |
+| T2      | ManU              | 1698-08-18  |
+| T3      | Barcelona         | 1698-08-18  |
+| T4      |  Real Madrid      | 1696-08-18  |
+| T5      | Liverpool         | 1696-08-18  |
+| T6      |  Chelsea          | 1696-08-18  |
+| T7      | Juventus          | 1696-08-18  |
+| T8      | Arsenal           | 1696-08-18  |
++---------+-------------------+-------------+
+8 rows in set (0.00 sec)
+
+insert into Player values('P1','Victor Lindelof ',2,25, 380000,5.11,'T1');
+
+mysql> select  * from Player;
++-----------+-----------------+---------+------+--------+--------+---------+
+| Player_id | Player_name     | JersyNo | age  | salary | height | Team_id |
++-----------+-----------------+---------+------+--------+--------+---------+
+| P1        | Victor Lindelof |       1 |   26 | 250000 |      6 | T1      |
+| P2        | Eden Hazard     |       2 |   25 | 250000 |      6 | T1      |
+| P3        | Edeazard        |       3 |   24 | 350000 |      6 | T1      |
+| P4        | Luka Modrid     |       4 |   26 | 400000 |      5 | T2      |
+| P5        | Modrid          |       5 |   28 | 500000 |      5 | T3      |
+| P6        | Aung Thu        |       6 |   29 | 600000 |      5 | T5      |
++-----------+-----------------+---------+------+--------+--------+---------+
+6 rows in set (0.00 sec)
+
+1. mysql> select * from Player where Team_id='T1';
++-----------+-----------------+---------+------+--------+--------+---------+
+| Player_id | Player_name     | JersyNo | age  | salary | height | Team_id |
++-----------+-----------------+---------+------+--------+--------+---------+
+| P1        | Victor Lindelof |       1 |   26 | 250000 |      6 | T1      |
+| P2        | Eden Hazard     |       2 |   25 | 250000 |      6 | T1      |
+| P3        | Edeazard        |       3 |   24 | 350000 |      6 | T1      |
++-----------+-----------------+---------+------+--------+--------+---------+
+
+
+2. mysql> select * from Player where salary>500000;
++-----------+-------------+---------+------+--------+--------+---------+
+| Player_id | Player_name | JersyNo | age  | salary | height | Team_id |
++-----------+-------------+---------+------+--------+--------+---------+
+| P6        | Aung Thu    |       6 |   29 | 600000 |      5 | T5      |
++-----------+-------------+---------+------+--------+--------+---------+
+1 row in set (0.07 sec)
+
+ 3. select Team.*,SUM(salary) from team,player where Team.Team_id=Player.Team_id AND Team.Team_id='T1';
++---------+-------------------+-------------+-------------+
+| Team_id | Team_name         | foundeddate | SUM(salary) |
++---------+-------------------+-------------+-------------+
+| T1      | Manchester United | 1699-08-18  |      850000 |
++---------+-------------------+-------------+-------------+
+1 row in set (0.10 sec)
+
+mysql> select Team.*,SUM(salary) from team,player where Team.Team_id=Player.Team_id AND Team.Team_id='T2';
++---------+-----------+-------------+-------------+
+| Team_id | Team_name | foundeddate | SUM(salary) |
++---------+-----------+-------------+-------------+
+| T2      | ManU      | 1698-08-18  |      400000 |
++---------+-----------+-------------+-------------+
+1 row in set (0.00 sec)
+
+mysql> select Team.*,SUM(salary) from team,player where Team.Team_id=Player.Team_id AND Team.Team_id='T3';
++---------+-----------+-------------+-------------+
+| Team_id | Team_name | foundeddate | SUM(salary) |
++---------+-----------+-------------+-------------+
+| T3      | Barcelona | 1698-08-18  |      500000 |
++---------+-----------+-------------+-------------+
+
+
+ 4. mysql> select * from Player where height>5;
++-----------+-----------------+---------+------+--------+--------+---------+
+| Player_id | Player_name     | JersyNo | age  | salary | height | Team_id |
++-----------+-----------------+---------+------+--------+--------+---------+
+| P1        | Victor Lindelof |       1 |   26 | 250000 |      6 | T1      |
+| P2        | Eden Hazard     |       2 |   25 | 250000 |      6 | T1      |
+| P3        | Edeazard        |       3 |   24 | 350000 |      6 | T1      |
++-----------+-----------------+---------+------+--------+--------+---------+
+3 rows in set (0.00 sec)
+
+
+
+mysql> select * from Player where height<=5;
++-----------+-------------+---------+------+--------+--------+---------+
+| Player_id | Player_name | JersyNo | age  | salary | height | Team_id |
++-----------+-------------+---------+------+--------+--------+---------+
+| P4        | Luka Modrid |       4 |   26 | 400000 |      5 | T2      |
+| P5        | Modrid      |       5 |   28 | 500000 |      5 | T3      |
+| P6        | Aung Thu    |       6 |   29 | 600000 |      5 | T5      |
++-----------+-------------+---------+------+--------+--------+---------+
+3 rows in set (0.00 sec)
+
+mysql> select * from Player where height<5;
+Empty set (0.00 sec)
+
+5.  select Team.*,AVG(salary) from Player,Team where Team.Team_id=Player.Team_id AND Team.Team_id='T1';
++---------+-------------------+-------------+-------------+
+| Team_id | Team_name         | foundeddate | AVG(salary) |
++---------+-------------------+-------------+-------------+
+| T1      | Manchester United | 1699-08-18  | 283333.3333 |
++---------+-------------------+-------------+-------------+
+1 row in set (0.00 sec)
+
+6.  SELECT Player_name , salary FROM Player WHERE salary IN (SELECT MAX(salary) FROM Player);
++-------------+--------+
+| Player_name | salary |
++-------------+--------+
+| Aung Thu    | 600000 |
++-------------+--------+
+1 row in set (0.08 sec)
+
+mysql> SELECT Player_name , salary FROM Player WHERE salary IN (SELECT MIN(salary) FROM Player);
++-----------------+--------+
+| Player_name     | salary |
++-----------------+--------+
+| Victor Lindelof | 250000 |
+| Eden Hazard     | 250000 |
++-----------------+--------+
+2 rows in set (0.00 sec)
+
+7. select Player.* from Player where age<29 AND salary>20000;
++-----------+-----------------+---------+------+--------+--------+---------+
+| Player_id | Player_name     | JersyNo | age  | salary | height | Team_id |
++-----------+-----------------+---------+------+--------+--------+---------+
+| P1        | Victor Lindelof |       1 |   26 | 250000 |      6 | T1      |
+| P2        | Eden Hazard     |       2 |   25 | 250000 |      6 | T1      |
+| P3        | Edeazard        |       3 |   24 | 350000 |      6 | T1      |
+| P4        | Luka Modrid     |       4 |   26 | 400000 |      5 | T2      |
+| P5        | Modrid          |       5 |   28 | 500000 |      5 | T3      |
++-----------+-----------------+---------+------+--------+--------+---------+
+
