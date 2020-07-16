@@ -1,0 +1,73 @@
+mysql> select * from food;
++---------+--------------+-------+---------+
+| food_id | food_name    | price | menu_id |
++---------+--------------+-------+---------+
+| f1      | aa pizza     |   700 | m1      |
+| f2      | black coffee |   500 | m2      |
+| f3      | bb burger    |  1000 | m3      |
++---------+--------------+-------+---------+
+
+
+mysql> select * from menu;
++---------+-----------+----------------+
+| menu_id | menu_name | description    |
++---------+-----------+----------------+
+| m1      | pizza     | This is pizza  |
+| m2      | coffee    | This is coffee |
+| m3      | burger    | This is burger |
++---------+-----------+----------------+
+
+mysql> select * from OrderTable;
++----+------------+------+---------+-------+-------------+
+| id | sale_date  | qty  | food_id | price | total_Price |
++----+------------+------+---------+-------+-------------+
+|  1 | 2020-07-16 |    2 | f1      |   700 |        1400 |
+|  2 | 2020-07-15 |    3 | f2      |   500 |        1000 |
+|  3 | 2020-07-15 |    2 | f3      |  1000 |        2000 |
+|  4 | 2020-07-14 |    5 | f2      |   500 |        2500 |
+|  5 | 2020-07-13 |    4 | f3      |  1000 |        4000 |
+|  6 | 2020-06-12 |    5 | f1      |  1000 |        5000 |
+|  7 | 2020-04-10 |    4 | f2      |  1000 |        4000 |
+|  8 | 2020-02-05 |    3 | f1      |   500 |        1500 |
++----+------------+------+---------+-------+-------------+
+
+
+mysql> select food.food_name,max(OrderTable.total_Price) from food,OrderTable where OrderTable.food_id=food.food_id Group by OrderTable.food_id;
++--------------+-----------------------------+
+| food_name    | max(OrderTable.total_Price) |
++--------------+-----------------------------+
+| aa pizza     |                        5000 |
+| black coffee |                        4000 |
+| bb burger    |                        4000 |
++--------------+-----------------------------+
+
+mysql> select food.food_name,min(OrderTable.total_Price) from food,OrderTable where OrderTable.food_id=food.food_id Group by food.food_id;
++--------------+-----------------------------+
+| food_name    | min(OrderTable.total_Price) |
++--------------+-----------------------------+
+| aa pizza     |                        1400 |
+| black coffee |                        1000 |
+| bb burger    |                        2000 |
++--------------+-----------------------------+
+
+mysql> select sale_date,sum(total_Price) from OrderTable group by sale_date;
++------------+------------------+
+| sale_date  | sum(total_Price) |
++------------+------------------+
+| 2020-07-16 |             1400 |
+| 2020-07-15 |             3000 |
+| 2020-07-14 |             2500 |
+| 2020-07-13 |             4000 |
+| 2020-06-12 |             5000 |
+| 2020-04-10 |             4000 |
+| 2020-02-05 |             1500 |
++------------+------------------+
+
+mysql> select OrderTable.sale_date as date,sum(OrderTable.total_Price) as total
+    -> from OrderTable
+    -> where sale_date between "2020-02-05" and  "2020-07-16" ;
++------------+-------+
+| date       | total |
++------------+-------+
+| 2020-07-16 | 21400 |
++------------+-------+
